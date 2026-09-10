@@ -23,23 +23,37 @@ description: 工业级跨境独立站 Dropshipping Niche 选词与商业模型�
 
 ---
 
-## 🛠️ 核心管线与三大不可逾越的硬门禁
+## 🛠️ 核心管线与四大不可逾越的硬门禁
 
-### 【门禁一：Step 1 先对照黑名单淘汰，再评分】
-在分析任何产品前，**必须先查阅 `references/blacklist.md`**：
-1. **海外发明专利**：凡命中类似 GenTent (US8997769B2) 等发明专利者，**直接 REJECT**；
-2. **商标假冒侵权**：产品表面印车标（如印 JEEP、7 孔格栅、Ford 徽标）者，**直接 REJECT**；
-3. **高危法律责任**：涉及碰撞安全约束、电气火灾、高温起火、医疗宣称者，**直接 REJECT**；
-4. **时效冲突品**：风暴断电急用、赶飞机急用等极端急救品，与 7–10 天跨境物流冲突导致高拒付者，**直接 REJECT**；
+### 【门禁一：Step 1 强制执行 Python 机器级断言校验 (validate_candidate.py)】
+在向用户推荐任何产品前，**严禁凭直觉或口头推荐！必须先在后台静默运行验证脚本**：
+```bash
+python C:\Users\hanzhe1\.claude\skills\dropship-niche-scout\scripts\validate_candidate.py \
+  --name "<候选品名称>" \
+  --price <售价> \
+  --cost-cny <1688成本> \
+  --weight <克重> \
+  --length <长cm> --width <宽cm> --height <高cm> \
+  --min-da <首页最低DA>
+```
+* **一票否决铁律**：如果脚本返回 `FAIL [REJECT]`（退出码 2），**物理禁止作为合格 Hero Product 推荐**！必须直接输出拦截原因向用户如实汇报；
+* 每次正式推荐，**必须在回复开头附带脚本生成的【Hard Gate 机器级自检卡】**。
+
+### 【门禁二：Step 2 先对照黑名单淘汰，再评分】
+必须查阅 `references/blacklist.md`：
+1. **海外发明专利**：凡命中类似 GenTent (US8997769B2) 等发明专利者，直接 REJECT；
+2. **商标假冒侵权**：产品表面印车标（如印 JEEP、7 孔格栅、Ford 徽标）者，直接 REJECT；
+3. **高危法律责任**：涉及碰撞安全约束、电气火灾、高温起火、医疗宣称者，直接 REJECT；
+4. **时效冲突品**：风暴断电急用、赶飞机急用等极端急救品，与 7–10 天跨境物流冲突导致高拒付者，直接 REJECT；
 5. **利润门槛**：广告前贡献毛利 **< $35 默认 REJECT**，理想标准 **≥ $50**！
 
-### 【门禁二：Step 3 强制 SERP 首页 Top 10 真实 DA 解剖】
+### 【门禁三：Step 3 强制 SERP 首页 Top 10 真实 DA 解剖】
 严禁只看 Ubersuggest 的宏观 SD 评分：
 1. 必须调用 `mcp__ubersuggest__serp_analysis` 逐站抓取 Google 首页前 10–15 名站点的 **Domain Authority (DA)**；
 2. **刚性门禁**：必须在 Top 10 中找到 **DA < 30（理想 DA 4–20）的垂直独立站/Shopify 小店**；
 3. 若首页被 Amazon、Home Depot、Walmart 等 DA 90+ 巨头封死且无独立站空间，必须降低评级！
 
-### 【门禁三：Step 4 强制调用 Python 脚本核算财务（拒绝口算）】
+### 【门禁四：Step 4 强制调用 Python 脚本核算财务（拒绝口算）】
 严禁在对话中估算或口算运费与毛利：
 * **必须查阅 `references/shipping_rates.md` 获取真实克重**；
 * **必须在后台运行脚本测算**：

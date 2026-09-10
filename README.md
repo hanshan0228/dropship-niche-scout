@@ -7,11 +7,10 @@
 
 ## 🌟 V2.0 重大架构升级特性
 
-1. **多指令敏捷路由 (Sub-Commands)**：
-   - `/dropship-niche-scout eval <词>`：单品 23 项指标全量底表与四大灵魂拷问；
-   - `/dropship-niche-scout cluster <大词>`：长尾流量金字塔深度挖掘；
-   - `/dropship-niche-scout vs <词A> <词B>`：8 维生死天平横向决选对比；
-   - `/dropship-niche-scout sync <标题>`：调研报告一键秒级直连同步至腾讯文档。
+1. **机器级 Hard Gate 断言校验脚本 (`scripts/validate_candidate.py`)**：
+   - 彻底消灭 AI“讨好型偏见”与“自作主张放水”；
+   - 推荐前强制在后台静默执行 8 项机器断言（真实体积重 ≤1.8kg、毛利 ≥$50、无电池、无电机芯片、非急救品、零专利商标侵权、首页最低 DA ≤30）；
+   - 只要任何一项 FAIL，退出码为 2，物理禁止作为推荐品输出！
 2. **确定性 Python 财务计算引擎 (`scripts/calc_economics.py`)**：
    - 彻底告别大模型心算幻觉与浮动；
    - 自动对照真实云途/4PX 中美特快专线阶梯费率；
