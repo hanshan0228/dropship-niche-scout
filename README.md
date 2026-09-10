@@ -1,28 +1,30 @@
-# Dropship Niche Scout (跨境独立站选品与商业模型评估 Skill)
+# Dropship Niche Scout (V2.0 工业级选品与商业模型评估引擎)
 
 > **专为 Claude Code / AI Agent 打造的确定性 Dropshipping Niche 选词与选品评估工作流。**
 > 严格基于 25 条选品铁律，强制杜绝 AI 偷懒、漂移与放水，实现“先淘汰、再抓数、查权重、算利润、定生死”的闭环调研。
 
 ---
 
-## 🌟 核心特性与硬门禁
+## 🌟 V2.0 重大架构升级特性
 
-1. **Hard Gate 机器级一票否决**：
-   - 自动排查海外发明专利（如 GenTent 专利 US8997769B2 等）；
-   - 坚决一票否决电气安全、排气高温起火、高危人身责任与急救型时效冲突品；
-   - 广告前贡献毛利低于 $35 直接 Reject，牢牢守住中高客单（$80–$150）与毛利（≥ $50）底线。
-2. **强制 Google SERP 首页 Top 10 真实 DA 权重切片**：
-   - 杜绝“只看工具 SD 评分”的虚假蓝海陷阱；
-   - 必须通过 Ubersuggest `serp_analysis` 逐站抓取 Google 首页真实 Domain Authority (DA)；
-   - 必须确认存在 DA < 30 的垂直独立站/Shopify 小店，才允许评定为可行 Niche。
-3. **真实单位经济模型测算 (Unit Economics)**：
-   - 采购价、国际专线小包运费、包装杂费、支付手续费、预留退款全链路核算；
-   - 自动计算 Break-even CAC、Target CAC 和 Break-even ROAS。
-4. **标准化输出交付（Section 21 全量大表 + Section 22 四大灵魂拷问）**：
-   - 23 项全量指标横向底表；
-   - 强制回答：“值不值得卖”、“为什么买我不买亚马逊”、“能承受多少 CAC”、“最可能怎么死”。
-5. **云端无缝同步（Tencent Docs / Cloud Sync）**：
-   - 内置腾讯在线云文档（docs.qq.com）一键秒级同步能力，将调研资产沉淀为云端知识库。
+1. **多指令敏捷路由 (Sub-Commands)**：
+   - `/dropship-niche-scout eval <词>`：单品 23 项指标全量底表与四大灵魂拷问；
+   - `/dropship-niche-scout cluster <大词>`：长尾流量金字塔深度挖掘；
+   - `/dropship-niche-scout vs <词A> <词B>`：8 维生死天平横向决选对比；
+   - `/dropship-niche-scout sync <标题>`：调研报告一键秒级直连同步至腾讯文档。
+2. **确定性 Python 财务计算引擎 (`scripts/calc_economics.py`)**：
+   - 彻底告别大模型心算幻觉与浮动；
+   - 自动对照真实云途/4PX 中美特快专线阶梯费率；
+   - 精确输出 Landed Cost、Pre-Ad Contribution Margin (毛利)、Break-even CAC、Target CAC 和 Break-even ROAS。
+3. **真实中美跨境专线物流资费底表 (`references/shipping_rates.md`)**：
+   - 收录 2026 最新中美特快专线首续重资费阶梯（7.15 汇率折算）；
+   - 内置抛重比（/6000）核算与抽真空打包节省成本指引。
+4. **高危专利与合规雷区黑名单 (`references/blacklist.md`)**：
+   - 收录 GenTent 发明专利 (US8997769B2) 等经典海外杀手专利；
+   - 汽车品牌（Jeep、Bronco 等）指示性合理使用 (Nominative Fair Use) 合规指引；
+   - 坚决一票否决电气火灾、人身碰撞安全约束及急救型时效冲突品。
+5. **专车引流选型计算器代码库 (`references/calculator_logic.md`)**：
+   - 包含轮胎外径数学换算、倒车摄像头避位判定、高尔夫球车 3 步选型纯前端轻量 JS 代码原型。
 
 ---
 
@@ -30,43 +32,46 @@
 
 ### 安装到 Claude Code
 
-克隆或下载到你的本地 Claude Code Skills 目录：
+克隆到你的本地 Claude Code Skills 目录：
 
 ```bash
 git clone https://github.com/hanshan0228/dropship-niche-scout.git ~/.claude/skills/dropship-niche-scout
 ```
 
-### 在会话中触发调用
+### 快速调用命令
 
-在 Claude Code 终端对话框中，你可以通过以下方式随时激活该技能：
+在 Claude Code 终端中随时执行：
 
-```text
-/dropship-niche-scout "golf cart accessories"
+```bash
+# 1. 评估单个利基词
+/dropship-niche-scout eval "golf cart seat covers"
+
+# 2. 挖掘大词下的流量金字塔与新势力红利
+/dropship-niche-scout cluster "golf cart accessories"
+
+# 3. 两个热门候选赛道生死对决
+/dropship-niche-scout vs "golf cart seat covers" "jeep tire covers"
+
+# 4. 将最新调研结果一键推送到腾讯文档
+/dropship-niche-scout sync "高尔夫球车选品调研报告"
 ```
 
-或者自然语言触发：
-* “用选品 SOP 评估一下这个词：`jeep tire covers`”
-* “帮我深度调研一下这个 Niche，并跑一下 Ubersuggest 数据和 SERP 权重”
-
 ---
 
-## 📋 23 项全量评估指标清单
+## 📁 目录结构
 
-| 维度 | 指标项 | 说明 |
-| :--- | :--- | :--- |
-| **需求面** | Product, Search Volume, Keyword Cluster, SD, CPC, Intent | 依托 Ubersuggest 官方接口提取 Google US 数据 |
-| **竞争面** | Top10 Lowest DA, Brand Dependence | 提取首页最低 DA，评估品牌依赖度 (1–5分) |
-| **财务面** | Typical Retail Price, Supplier Cost, Landed Cost, Selling Price, Contribution Margin, Break-even CAC, Target CAC, Break-even ROAS | 严格遵守售价 $80–$150、毛利 ≥ $50 门槛 |
-| **履约面** | Return Risk, Shipping Risk | 包装重量、抛重、易碎性、无理由退货率预估 |
-| **渠道面** | SEO Score, Google Ads Score, Meta Score | 各渠道获客潜力拆解 (0–10分) |
-| **综合面** | Opportunity Score, Confidence Score, 最终分类 | 商业价值与置信度双分，给出 Hero / Upsell / Reject 定性 |
-
----
-
-## 🛠️ 配套前置依赖
-
-* **Ubersuggest MCP Server**：用于调取 Google US 官方关键词指标与 SERP 首页竞争分析；
-* **Tencent Docs MCP Server (可选)**：用于将报告一键写入腾讯在线文档。
+```text
+dropship-niche-scout/
+├── SKILL.md                  # 主控调度中心（四模式路由与硬门禁）
+├── README.md                 # 完整的使用指南与架构文档
+├── scripts/
+│   ├── calc_economics.py     # 纯 Python 财务计算引擎（零口算幻觉）
+│   └── sync_tencent_docs.py  # 腾讯文档秒级同步直通管道 (突破CMD长度限制)
+└── references/
+    ├── shipping_rates.md     # 2026 最新中美跨境专线小包阶梯运费表
+    ├── blacklist.md          # 高危发明专利、车企商标与急救品类黑名单
+    └── calculator_logic.md   # 专车选型计算器（The Killer Sizer）代码原型库
+```
 
 ---
 
