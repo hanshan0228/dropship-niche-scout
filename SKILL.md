@@ -20,6 +20,8 @@ description: 工业级跨境独立站 Dropshipping Niche 选词与商业模型�
 | `/dropship-niche-scout cluster <大词>` | **长尾集群挖掘** | 挖掘大词下的流量金字塔（塔尖大盘词、核心爆品池、品牌专区词、新势力长尾暴利词），测算整体 Topic Addressable Market。 |
 | `/dropship-niche-scout vs <词A> <词B>` | **双品生死对决** | 将两个候选品放在 8 维生死天平（SEO难度、首页弱对手、客单价、毛利厚度、合规风险、退货率、社媒广告潜力、物流）进行横向对比，给出最终一票投给谁。 |
 | `/dropship-niche-scout supplier <关键词>` | **速卖通优质货源精筛** | 联动速卖通 MCP 与 `filter_suppliers.py`，按店铺好评率 ≥ 96%、年限 ≥ 2年、商品评分 ≥ 4.7★、销量 > 100单严格过滤（不设价格死线，按动态毛利核算），直接交付高分货源链接卡片。 |
+| `/dropship-niche-scout spy-store <域名/网址>` | **竞品独立站深度扒取** | 调用 `scripts/spy_store.py` (基于 shopify-spy)，一键提取竞品 Shopify 独立站全部在售商品、真实价格带、变体数、上架日期与爆款商品链接。 |
+| `/dropship-niche-scout spy-ads <关键词/主页>` | **Meta 社媒广告间谍** | 调用 `scripts/spy_ads.py` (基于 meta-ads-collector)，无需 API Key 逆向抓取竞品在 Facebook/Instagram 上正在投放的真实广告文案钩子、视频图片形式与在投天数。 |
 | `/dropship-niche-scout sync <文档标题>` | **腾讯文档云端同步** | 调用内置的 Python 脚本，避开 Windows 命令行长度限制，将本轮调研报告毫秒级推送到腾讯在线文档 (docs.qq.com)。 |
 
 ---
