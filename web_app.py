@@ -66,7 +66,7 @@ def get_llm_config():
         return {
             "token": env.get("ANTHROPIC_AUTH_TOKEN"),
             "base_url": env.get("ANTHROPIC_BASE_URL", "http://127.0.0.1:8317"),
-            "model": env.get("ANTHROPIC_MODEL", "gpt-5.6-luna")
+            "model": env.get("ANTHROPIC_MODEL", "gemini-3.8-flash-high")
         }
     except Exception:
         return None
