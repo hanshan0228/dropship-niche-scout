@@ -22,6 +22,7 @@ description: 工业级跨境独立站 Dropshipping Niche 选词与商业模型�
 | `/dropship-niche-scout supplier <关键词>` | **速卖通优质货源精筛** | 联动速卖通 MCP 与 `filter_suppliers.py`，按店铺好评率 ≥ 96%、年限 ≥ 2年、商品评分 ≥ 4.7★、销量 > 100单严格过滤（不设价格死线，按动态毛利核算），直接交付高分货源链接卡片。 |
 | `/dropship-niche-scout spy-store <域名/网址>` | **竞品独立站深度扒取** | 调用 `scripts/spy_store.py` (基于 shopify-spy)，一键提取竞品 Shopify 独立站全部在售商品、真实价格带、变体数、上架日期与爆款商品链接。 |
 | `/dropship-niche-scout spy-ads <关键词/主页>` | **Meta 社媒广告间谍** | 调用 `scripts/spy_ads.py` (基于 meta-ads-collector)，无需 API Key 逆向抓取竞品在 Facebook/Instagram 上正在投放的真实广告文案钩子、视频图片形式与在投天数。 |
+| `/dropship-niche-scout web` | **可视化网页控制台** | 运行 `web_app.py` 启动本地选品作战看板 (http://127.0.0.1:8088)，支持滑块联动测算毛利、竞品图片瀑布流浏览与广告文案视觉化比对。 |
 | `/dropship-niche-scout sync <文档标题>` | **腾讯文档云端同步** | 调用内置的 Python 脚本，避开 Windows 命令行长度限制，将本轮调研报告毫秒级推送到腾讯在线文档 (docs.qq.com)。 |
 
 ---

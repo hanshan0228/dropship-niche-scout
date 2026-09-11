@@ -60,7 +60,10 @@ git clone https://github.com/hanshan0228/dropship-niche-scout.git ~/.claude/skil
 # 6. 免 API Key 间谍抓取同行正在投放的 Facebook/Instagram 广告素材与文案
 /dropship-niche-scout spy-ads "golf cart seat covers"
 
-# 7. 将最新调研结果一键推送到腾讯文档
+# 7. 一键启动本地可视化 Web 控制台 (支持滑块联动测算与竞品图片流)
+/dropship-niche-scout web
+
+# 8. 将最新调研结果一键推送到腾讯文档
 /dropship-niche-scout sync "高尔夫球车选品调研报告"
 ```
 
@@ -70,13 +73,23 @@ git clone https://github.com/hanshan0228/dropship-niche-scout.git ~/.claude/skil
 
 ```text
 dropship-niche-scout/
-├── SKILL.md                          # 主控调度中心（七大模式路由与刚性门禁）
+├── SKILL.md                          # 主控调度中心（八大模式路由与刚性门禁）
 ├── README.md                         # 完整的使用指南与架构文档
+├── web_app.py                        # 本地自用交互式可视化 Web 控制台 (Starlette+Uvicorn)
+├── start_web.ps1                     # 一键启动 Web 控制台快捷脚本
 ├── scripts/
 │   ├── calc_economics.py             # 纯 Python 财务计算引擎（零口算幻觉）
 │   ├── validate_candidate.py         # 机器级 Hard Gate 8大门禁断言脚本
 │   ├── filter_suppliers.py           # 速卖通优质货源机器级审核门禁脚本
 │   ├── spy_store.py                  # 竞品 Shopify 独立站商品与价格带深度提取
+│   ├── spy_ads.py                    # Meta 广告库在投竞品广告间谍抓取
+│   └── sync_tencent_docs.py          # 腾讯文档秒级同步直通管道 (突破CMD长度限制)
+└── references/
+    ├── supplier_vetting_standards.md # 速卖通供货商资质与动态毛利审核硬标准
+    ├── shipping_rates.md             # 2026 最新中美跨境专线小包阶梯运费表
+    ├── blacklist.md                  # 高危发明专利、车企商标与急救品类黑名单
+    └── calculator_logic.md           # 专车选型计算器（The Killer Sizer）代码原型库
+```
 │   ├── spy_ads.py                    # Meta 广告库在投竞品广告间谍抓取
 │   └── sync_tencent_docs.py          # 腾讯文档秒级同步直通管道 (突破CMD长度限制)
 └── references/
