@@ -10,6 +10,8 @@ import sys
 import os
 import json
 import argparse
+import urllib.parse
+import asyncio
 from datetime import datetime
 import io
 
@@ -24,6 +26,86 @@ try:
     from meta_ads_collector import MetaAdsCollector
 except ImportError:
     MetaAdsCollector = None
+
+async def _scrape_ads_patchright_async(query, country="US", max_results=5):
+    try:
+        from patchright.async_api import async_playwright
+    except ImportError:
+        return []
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        context = await browser.new_context(locale="en-US", viewport={"width": 1440, "height": 900})
+        page = await context.new_page()
+        encoded_q = urllib.parse.quote(query)
+        url = f"https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country={country}&q={encoded_q}&search_type=keyword_unordered&media_type=all"
+        await page.goto(url, wait_until="domcontentloaded", timeout=40000)
+        await page.wait_for_timeout(5000)
+        await page.evaluate("window.scrollBy(0, 1200)")
+        await page.wait_for_timeout(2000)
+
+        ads = await page.evaluate("""
+            () => {
+                const items = [];
+                const divs = document.querySelectorAll('div');
+                const seenIds = new Set();
+                for (const d of divs) {
+                    const txt = d.innerText || '';
+                    if (txt.includes('Library ID:') && (txt.includes('Started running on') || txt.includes('Active'))) {
+                        const idMatch = txt.match(/Library ID:\\s*(\\d+)/);
+                        if (!idMatch) continue;
+                        const id = idMatch[1];
+                        if (seenIds.has(id)) continue;
+                        seenIds.add(id);
+
+                        const lines = txt.split('\\n').map(l => l.trim()).filter(l => l.length > 0);
+                        const img = d.querySelector('img');
+                        const video = d.querySelector('video');
+
+                        let pageName = 'Sponsored Brand';
+                        let startDate = 'Active';
+                        let body = '';
+
+                        for (let i = 0; i < lines.length; i++) {
+                            if (lines[i].includes('Started running on')) {
+                                startDate = lines[i];
+                                if (i > 0) pageName = lines[i - 1];
+                            }
+                        }
+
+                        const bodyCandidates = lines.filter(l => l.length > 25 && !l.includes('Library ID') && !l.includes('Started running') && !l.includes('Sponsored'));
+                        if (bodyCandidates.length > 0) {
+                            body = bodyCandidates.slice(0, 2).join(' ');
+                        }
+
+                        items.push({
+                            id: id,
+                            page_name: pageName,
+                            page_id: '',
+                            media_type: video ? 'VIDEO' : 'IMAGE',
+                            headline: '',
+                            body: body,
+                            cta: 'Shop Now',
+                            image_url: img ? img.src : '',
+                            video_url: '',
+                            link_url: '',
+                            start_date: startDate,
+                            ad_snapshot_url: `https://www.facebook.com/ads/library/?id=${id}`
+                        });
+                    }
+                }
+                return items;
+            }
+        """)
+        await browser.close()
+        return ads[:max_results]
+
+def _scrape_ads_patchright(query, country="US", max_results=5):
+    try:
+        return asyncio.run(_scrape_ads_patchright_async(query, country, max_results))
+    except Exception as e:
+        print(f"Browser fallback error: {e}")
+        return []
 
 def spy_competitor_ads(query, country="US", max_results=5, proxy="127.0.0.1:10809"):
     if not MetaAdsCollector:
@@ -48,15 +130,19 @@ def spy_competitor_ads(query, country="US", max_results=5, proxy="127.0.0.1:1080
                 media_type = "UNKNOWN"
                 link_url = ""
 
+                image_url = ""
+                video_url = ""
                 if ad.creatives:
                     c = ad.creatives[0]
-                    body = c.body or ""
-                    headline = c.title or ""
-                    cta = c.call_to_action_type or ""
-                    link_url = c.link_url or ""
-                    if c.video_url:
+                    body = getattr(c, "body", "") or getattr(c, "caption", "") or getattr(c, "description", "") or ""
+                    headline = getattr(c, "title", "") or ""
+                    cta = getattr(c, "cta_text", "") or getattr(c, "cta_type", "") or ""
+                    link_url = getattr(c, "link_url", "") or ""
+                    image_url = getattr(c, "image_url", "") or getattr(c, "thumbnail_url", "") or ""
+                    video_url = getattr(c, "video_url", "") or getattr(c, "video_hd_url", "") or getattr(c, "video_sd_url", "") or ""
+                    if video_url:
                         media_type = "VIDEO"
-                    elif c.image_url:
+                    elif image_url:
                         media_type = "IMAGE"
 
                 start_date_str = ad.delivery_start_time.strftime("%Y-%m-%d") if ad.delivery_start_time else "Unknown"
@@ -69,14 +155,21 @@ def spy_competitor_ads(query, country="US", max_results=5, proxy="127.0.0.1:1080
                     "headline": headline,
                     "body": body,
                     "cta": cta,
+                    "image_url": image_url,
+                    "video_url": video_url,
                     "link_url": link_url,
                     "start_date": start_date_str,
                     "ad_snapshot_url": ad.ad_snapshot_url or f"https://www.facebook.com/ads/library/?id={ad.id}"
                 })
-        return {"query": query, "country": country, "total_found": len(results), "items": results}
     except Exception as e:
-        print(f"⚠️ Meta Ad Library query encountered an issue: {e}")
-        return {"query": query, "error": str(e), "items": results}
+        print(f"ℹ️ MetaAdsCollector note: {e}")
+
+    # Fallback to browser stealth transport if direct collector got 0 ads
+    if not results:
+        print("ℹ️ Direct collector returned 0 ads. Activating browser transport fallback...")
+        results = _scrape_ads_patchright(query, country, max_results)
+
+    return {"query": query, "country": country, "total_found": len(results), "items": results}
 
 def print_ad_report(data):
     print("=" * 80)

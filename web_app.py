@@ -552,7 +552,7 @@ async def api_spy_store(request):
         body = await request.json()
         url = body.get("url", "birdiegirlgolf.com")
         limit = int(body.get("limit", 16))
-        res = spy_shopify_store(url, limit=limit)
+        res = await asyncio.to_thread(spy_shopify_store, url, limit=limit)
         return JSONResponse(res)
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=400)
@@ -563,7 +563,7 @@ async def api_spy_ads(request):
         query = body.get("query", "golf cart seat covers")
         limit = int(body.get("limit", 6))
         country = body.get("country", "US")
-        res = spy_competitor_ads(query, country=country, max_results=limit)
+        res = await asyncio.to_thread(spy_competitor_ads, query, country=country, max_results=limit)
         return JSONResponse(res)
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=400)
