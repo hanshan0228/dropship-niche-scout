@@ -19,6 +19,7 @@ description: 工业级跨境独立站 Dropshipping Niche 选词与商业模型�
 | `/dropship-niche-scout eval <关键词>` | **单品深度评估 (默认)** | 严格执行 Hard Gate、Ubersuggest 数据与 SERP 首页 Top 10 DA 分析，调用 Python 脚本测算财务，输出 Section 21 的 23 项全量大表与 Section 22 四大灵魂拷问。 |
 | `/dropship-niche-scout cluster <大词>` | **长尾集群挖掘** | 挖掘大词下的流量金字塔（塔尖大盘词、核心爆品池、品牌专区词、新势力长尾暴利词），测算整体 Topic Addressable Market。 |
 | `/dropship-niche-scout vs <词A> <词B>` | **双品生死对决** | 将两个候选品放在 8 维生死天平（SEO难度、首页弱对手、客单价、毛利厚度、合规风险、退货率、社媒广告潜力、物流）进行横向对比，给出最终一票投给谁。 |
+| `/dropship-niche-scout supplier <关键词>` | **速卖通优质货源精筛** | 联动速卖通 MCP 与 `filter_suppliers.py`，按店铺好评率 ≥ 96%、年限 ≥ 2年、商品评分 ≥ 4.7★、销量 > 100单严格过滤（不设价格死线，按动态毛利核算），直接交付高分货源链接卡片。 |
 | `/dropship-niche-scout sync <文档标题>` | **腾讯文档云端同步** | 调用内置的 Python 脚本，避开 Windows 命令行长度限制，将本轮调研报告毫秒级推送到腾讯在线文档 (docs.qq.com)。 |
 
 ---
@@ -61,6 +62,32 @@ python C:\Users\hanzhe1\.claude\skills\dropship-niche-scout\scripts\validate_can
   python C:\Users\hanzhe1\.claude\skills\dropship-niche-scout\scripts\calc_economics.py --price <售价> --cost-cny <1688采购价> --weight <克重>
   ```
 * 严格按照脚本返回的精确数值填入交付表格。
+
+### 【门禁五：Step 5 速卖通优质货源硬门禁 (filter_suppliers.py)】
+> 详见底层标准：`references/supplier_vetting_standards.md`
+
+当向用户推荐任何速卖通具体货源或跑 `/dropship-niche-scout supplier` 时，**严禁口头推荐！必须先在后台运行校验脚本**：
+```bash
+python C:\Users\hanzhe1\.claude\skills\dropship-niche-scout\scripts\filter_suppliers.py \
+  --name "<商品名称>" \
+  --cost <拿货价USD> \
+  --retail <建议售价USD> \
+  --rating <商品评分> \
+  --orders <总出单量> \
+  --store-rate <店铺好评率> \
+  --store-years <开店年限> \
+  --url "<商品链接>"
+```
+* **一票否决指标**：
+  1. **店铺好评率**：必须 **≥ 96.0%**（低于 96% 直接 REJECT）；
+  2. **开店时间**：必须 **≥ 2 年**（新店直接 REJECT，杜绝跑路）；
+  3. **商品评分**：必须 **≥ 4.7★**（低于 4.7 直接 REJECT，防止售后退款率爆表）；
+  4. **历史出单**：必须 **> 100 单**（未验证模具直接淘汰）；
+  5. **直发美国**：必须支持全程带号追踪直发美国；
+  6. **价格与利润准则（核心：不设价格死线，按动态毛利核算）**：
+     - **绝不在进货价端设置机械死线**（无论 $10 还是 $80 均可）；
+     - 只要独立站终端售价测算出的 **广告前贡献毛利 (Pre-Ad Margin) ≥ $35.00 (理想 ≥ $50.00)** 即可判定达标！
+* 若脚本返回 `FAIL [REJECT]`，物理禁止作为合格货源向用户交付！必须向用户输出拦截原因。
 
 ---
 

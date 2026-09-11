@@ -51,7 +51,10 @@ git clone https://github.com/hanshan0228/dropship-niche-scout.git ~/.claude/skil
 # 3. 两个热门候选赛道生死对决
 /dropship-niche-scout vs "golf cart seat covers" "jeep tire covers"
 
-# 4. 将最新调研结果一键推送到腾讯文档
+# 4. 精筛速卖通优质供应商（好评率≥96%、年限≥2年、评分≥4.7★、销量>100，不限进货价按动态毛利核算）
+/dropship-niche-scout supplier "golf cart seat covers"
+
+# 5. 将最新调研结果一键推送到腾讯文档
 /dropship-niche-scout sync "高尔夫球车选品调研报告"
 ```
 
@@ -61,15 +64,18 @@ git clone https://github.com/hanshan0228/dropship-niche-scout.git ~/.claude/skil
 
 ```text
 dropship-niche-scout/
-├── SKILL.md                  # 主控调度中心（四模式路由与硬门禁）
-├── README.md                 # 完整的使用指南与架构文档
+├── SKILL.md                          # 主控调度中心（五模式路由与刚性门禁）
+├── README.md                         # 完整的使用指南与架构文档
 ├── scripts/
-│   ├── calc_economics.py     # 纯 Python 财务计算引擎（零口算幻觉）
-│   └── sync_tencent_docs.py  # 腾讯文档秒级同步直通管道 (突破CMD长度限制)
+│   ├── calc_economics.py             # 纯 Python 财务计算引擎（零口算幻觉）
+│   ├── validate_candidate.py         # 机器级 Hard Gate 8大门禁断言脚本
+│   ├── filter_suppliers.py           # 速卖通优质货源机器级审核门禁脚本
+│   └── sync_tencent_docs.py          # 腾讯文档秒级同步直通管道 (突破CMD长度限制)
 └── references/
-    ├── shipping_rates.md     # 2026 最新中美跨境专线小包阶梯运费表
-    ├── blacklist.md          # 高危发明专利、车企商标与急救品类黑名单
-    └── calculator_logic.md   # 专车选型计算器（The Killer Sizer）代码原型库
+    ├── supplier_vetting_standards.md # 速卖通供货商资质与动态毛利审核硬标准
+    ├── shipping_rates.md             # 2026 最新中美跨境专线小包阶梯运费表
+    ├── blacklist.md                  # 高危发明专利、车企商标与急救品类黑名单
+    └── calculator_logic.md           # 专车选型计算器（The Killer Sizer）代码原型库
 ```
 
 ---
